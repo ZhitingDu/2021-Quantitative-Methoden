@@ -1,0 +1,87 @@
+1 The following data frame is the part of the dataset "mtcars" from the dyplr package. If we want to get the rows, which the mpg-value is above 21 and the cyl is exactly 4, which the following code is right?
+
+
+filter(mtcars,mpg>21,cyl==4)
+select(mtcars,mpg>21,cyl==4)
+slice(mtcars,mpg>21,cyl==4)
+distinct(mtcars,mpg>21,cyl==4)
+filter(mtcars,mpg>21,cyl=4)
+
+
+2 Following the last question, rearrange the data frame. It should first be sorted according to cyl and then in descending order according to wt, which the following code is right?
+
+arrange(mtcars,cyl,desc(wt))
+arrange(mtcars,desc(wt),cyl)
+desc(mtcars,cyl,arrange(wt))
+order_by(mtcars,cyl,desc(wt))
+order_by(mtcars,desc(wt),cyl)
+
+3 Following the last question, if we want to select the columns contain mpg and hp, then which the following code is right?
+
+select(mtcars,mpg,hp)
+filter(mtcars,mpg,hp)
+data.frame(mtcars,mpg,hp)
+slice(mtcars,mpg,hp)
+distinct(mtcars,mpg,hp)
+
+4 Following the last question, choose the only value that the column gear has, then...?
+distinct(select(mtcars,gear))
+distinct(filter(mtcars,gear))
+select(distinct(mtcars,gear))
+filter(select(mtcars,gear))
+select(filter(mtcars,gear))
+
+5 Following the last question, add a new column "performance" which is divided by the column hp and wt to the dataframe, then which r code is right?
+
+mutate(mtcars,Performance=hp/wt)
+add_column(mtcars,Performance=hp/wt)
+add_case(mtcars,Performance=hp/wt)
+add_count(mtcars,Performance=hp/wt)
+transmute(mtcars,Performance=hp/wt)
+
+
+
+
+6 Following the last question, we want to change the name of the column "performance" to "pfm", then which r code is right?
+
+rename(mtcars,Performance=pfm)
+add_column(mtcars,Performance=pfm)
+add_case(mtcars,Performance=pfm)
+add_count(mtcars,Performance=pfm)
+transmute(mtcars,Performance=pfm)
+
+
+
+7 Following the last question, find the average of the column mpg and remove the NA value, then which r code is right?
+
+summarise(mtcars,avg_mpg=mean(mpg, na.rm=TRUE))
+mean(mtcars,avg_mpg=summarise(mpg,na.rm=TRUE))
+add_count(mtcars,avg_mpg=mean(mpg))
+summarise(mtcars,avg_mpg=add_count(mpg))
+mutate(mtcars,avg_mpg=mean(mpg)) 
+
+8 Following the last question, using the pipe operator to get the mean of the hp which the cyl is 6, then which r code is right?
+
+mtcars %>% filter(cyl==6) %>% summarise(avg_hp = mean(hp))
+mtcars %>% select(cyl==6) %>% summarise(avg_hp = mean(hp))
+mtcars %>% summarise(cyl==6) %>% summarise(avg_hp = mean(hp))
+mtcars %>% summarise(cyl==6) %>% filter(avg_hp = mean(hp))
+mtcars %>% filter(cyl==6) %>% select(avg_hp = mean(hp))
+
+9 If we want to randomly from the dataset mtcars take out 10 rows of the data, then which r code is right?
+sample_n(mtcars,10)
+sample_frac(flights,10)
+slice(flights,10)
+select(flights,10)
+filter(flights,10)
+
+10 If we want to randomly from the dataset mtcars take out 5% the data, then which r code is right?
+
+sample_frac(mtcars,0.05)
+sample_n(flights,0.05)
+slice(flights,0.05)
+select(flights,0.05)
+filter(flights,0.05)
+
+
+

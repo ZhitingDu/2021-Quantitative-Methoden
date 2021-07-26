@@ -1,0 +1,142 @@
+Arm 3
+
+
+
+1 Multiple predictors - If the fitted model is: kid.score = 26 + 6 · mom.hs + 0.6 · mom.iq + error, under the condition of one of the predictor "mom.hs" remains unchanged, which of the following saying is right? (Reference can be found in ARM 3.2)
+
+Changing maternal IQ from 100 to 101 would lead to an expected increase of 0.6 in child’s test
+score.
+Changing maternal IQ from 100 to 101 would lead to an expected increase of 6 in child’s test
+score.
+Changing maternal IQ from 100 to 101 would lead to an expected decrease of 0.6 in child’s test
+score.
+Changing maternal IQ from 100 to 101 would lead to an expected decrease of 6 in child’s test
+score.
+None of them is right
+
+
+2 Interaction - If the fitted model is: kid.score = −11 + 51 · mom.hs + 1.1 · mom.iq − 0.5 · mom.hs · mom.iq + error, which of the following saying is right? (Reference can be found in ARM 3.3)
+
+There is a interaction between mom.hs and mom.iq
+This model has two predictors in this model, mom.hs and mom.iq
+The regression lines of the model when mom.hs=0 and mom.hs=1 would be parallel
+The coefficient 0.5 cannot represent the difference in the slope formom.iq, comparing the regression lines when mom.hs=0 and mom.hs=1
+None of them is right
+ 
+
+
+3 Statistical inference - In the model: kid.score = −11 + 51 · mom.hs + 1.1 · mom.iq − 0.5 · mom.hs · mom.iq + error, which of the following saying is right? (Reference can be found in ARM 3.4)
+
+This model has four predictors
+This model has four inputs
+Error have independent normal distributions with mean=1
+Error have dependent normal distributions with mean=1
+None of them is right
+
+
+4 Which the following saying is right?
+(Reference can be found in ARM 3.4)
+
+The fit of the model can be summarized by Residual standard deviation and Rsquared
+The fit of the model can be summarized by Degrees of freedom and Rsquared
+The larger the Residual standard deviation is, the more fit the model is
+The larger the Rsquared is, the more fit the model is
+None of them
+
+
+
+5 Graphical displays of data and fitted model - if we want to plot two fitted regression lines with two imputes, which the following function would not be used? (Reference can be found in ARM 3.5)
+
+sim()
+plot()
+curve()
+lm()
+None of them
+
+
+
+
+
+
+6 Graphical displays of data and fitted model - if we want to represent the uncertainty in the estimated regression coefficients (create simulations), which the following function would be used?
+(Reference can be found in ARM 3.5)
+
+sim()
+plot()
+curve()
+lm()
+None of them
+
+
+
+
+
+
+7 If the model is y=abc, what is the best solution to transform the data to create the additivity?
+
+(Reference can be found in ARM 3.6)
+
+Logy = loga + logb + logc
+y^2 = (abc)^2
+1/y = 1/(abc)
+y = log(a)*log(b)*log(c)
+None of them
+
+
+
+
+
+8 Which is a good way to check the assumption's importantly and linearity?
+(Reference can be found in ARM 3.6)
+
+Residual plot
+Regression line plot
+Outcome's distribution plot
+Correlation plot
+None of them
+
+
+
+9 In the ARM book we have created linear model: fit3 (fit.3 <- lm (kid.score ~ mom.hs + mom.iq)), which of the following syntax is right if we want to predict this model in test dataset?
+
+(Reference can be found in ARM 3.7)
+
+predict(fit3, testdata)
+predict(testdata, fit3)
+lm(fit3, testdata)
+lm(testdata, fit3)
+None of them
+
+
+
+
+
+
+10 Which the following term would be considered when make assumptions and diagnostic
+Of regression model?
+(Reference can be found in ARM 3.6 )
+
+All of these
+Independence of errors
+Equal variance of errors
+Validity
+Additivity and Linearity
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,127 @@
+
+1 Which the following statement of Adjusted R-squared is right?
+
+When there are one more variables, to get a better estimate, we use the Adjusted R-squared to determine how fit the model is
+Sometimes we would find that the Adjusted R-squared is optimistic
+When there is only k=1 predictors, Adjusted R-squared is not close to regular R-squared
+When there is only k=1 predictors, we would rather use regular R-squared to determine than the Adjusted R-squared
+None of these is right
+
+
+
+2 Which is not the criteria to select a model?
+
+The amount of the variables
+Adjustiertes R-Quadrat
+p-values
+AIC
+BIC
+
+
+3 Which the following statement is right to select a model?
+
+Adjustiertes R-Quadrat describes the strength of a model fit
+The best model is always the most complicated
+Forward selection starts with the full model.
+Backward elimination is the reverse of the backward elimination technique, we add variables one-at-a-time until we cannot find any variables that improve the model any further
+None of these is right
+
+
+4 If we have a linear model running in R: 
+testmodel <- lm(absichtni~IQ+Motivation, data=data_xls), and have the following result, which the following option describe this model?
+
+https://www.youtube.com/watch?v=ef0efKL1Els
+
+Absichtni = 7.558010 - 0.039215*IQ - 0.139323*Motivation + error
+Absichtni = 0.039215 - 7.558010 *IQ - 0.139323*Motivation + error
+Absichtni = 0.139323 - 0.039215*IQ - 7.558010 *Motivation + error
+Absichtni = 0.139323 - 7.558010*IQ - 0.139323*Motivation + error
+Absichtni = 7.558010 - 0.039215*IQ - 7.558010*Motivation + error
+
+
+
+
+5 This dataset is aimed to discover the demand of bike sharing. Forecast use of a city bikeshare system.If we want to know how the factors: "atemp" and "casual" affect the "count", what the following multiple regression model shall we establish?
+
+
+datetime - hourly date + timestamp  
+season -  1 = spring, 2 = summer, 3 = fall, 4 = winter 
+holiday - whether the day is considered a holiday
+workingday - whether the day is neither a weekend nor holiday
+weather - 1: Clear, Few clouds, Partly cloudy, Partly cloudy
+2: Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist
+3: Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds
+4: Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog 
+temp - temperature in Celsius
+atemp - "feels like" temperature in Celsius
+humidity - relative humidity
+windspeed - wind speed
+casual - number of non-registered user rentals initiated
+registered - number of registered user rentals initiated
+count - number of total rentals
+
+
+Data source :https://www.kaggle.com/c/bike-sharing-demand/data
+
+count = b0+b1*casual+b2*atemp
+casual = b0+b1*casual+b2*atemp
+atemp = b0+b1*count+b2*atemp
+count = b1*casual+b2*atemp
+None of these is right
+
+
+
+
+6 This dataset is aimed to discover the demand of bike sharing. Forecast use of a city bikeshare system.If we want to know how the factors: "atemp" and "casual" affect the "count", what the following multiple regression model shall we establish in R?
+
+
+datetime - hourly date + timestamp  
+season -  1 = spring, 2 = summer, 3 = fall, 4 = winter 
+holiday - whether the day is considered a holiday
+workingday - whether the day is neither a weekend nor holiday
+weather - 1: Clear, Few clouds, Partly cloudy, Partly cloudy
+2: Mist + Cloudy, Mist + Broken clouds, Mist + Few clouds, Mist
+3: Light Snow, Light Rain + Thunderstorm + Scattered clouds, Light Rain + Scattered clouds
+4: Heavy Rain + Ice Pallets + Thunderstorm + Mist, Snow + Fog 
+temp - temperature in Celsius
+atemp - "feels like" temperature in Celsius
+humidity - relative humidity
+windspeed - wind speed
+casual - number of non-registered user rentals initiated
+registered - number of registered user rentals initiated
+count - number of total rentals
+
+
+Data source :https://www.kaggle.com/c/bike-sharing-demand/data
+
+lm(count ~  casual+ atemp, data=bikeshare)
+lm(casaul ~  casual+ atemp, data=bikeshare)
+lm(atemp ~  casual+ atemp, data=bikeshare)
+lm(count ~  casual+ atemp + count, data=bikeshare)
+None of these is right
+
+
+
+7 Which the following statement of logistic regression is right?
+Logistic regression is ideal for the outcome which is categorical variable with two levels(binary, I.e, yes or no)
+Logistic regression is ideal for the independent variables which are categorical variables with two levels(binary, I.e, yes or no)
+Logistic regression is ideal for the model which contains only two predictors
+Ultimately, the application of a Logistic regression will feel exactly same to multiple regression
+None of these is right
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,95 @@
+1, What is the following statement of t-distribution is right?
+
+The t-distribution is always centered at zero
+The t-distribution’s tails are thiner than the normal distribution’s
+When we have more observations, the degree of freedom will be smaller
+The smaller the degrees of freedom, the less closely the distribution to the normal model
+None of them is right
+
+
+
+2 In the following two plots, the left plot has a sample (n=15), the right plot has a sample (n=50).
+Which one is satisfied for the normality condition?
+
+Left
+Right
+Both
+None of them
+Can not know
+
+
+3 In the following plot, which one has the largest degree of freedom?
+
+The blue curve
+The red curve
+The dark green curve
+The light green curve
+None of them
+
+4 A class has 16 students, in an exam, the score of whole class has following result:  s= 2.4, mean=61, minimum score:52, maximum: 89. What is the degree of freedom of the exam result?
+
+15
+16
+17
+18
+19
+
+5 A class has 16 students, in an exam, the score of whole class has following result:  s= 2.4, mean=61, minimum score:52, maximum: 89. What is the SE of the exam result?
+
+0.6
+0.7
+0.8
+0.9
+1
+
+
+6 In a one-mean hypothesis test, if the p-value is smaller than the 5%, that means:
+
+The sample fits perfect to the H0 (Nullhypothese)
+HA (Hypothese alternative) is absolutely right
+HA (Hypothese alternative) is most likely right
+That is the evidence for the H0 (Nullhypothese)
+None of them is right
+
+
+7 Here we want to find out a question, is the man in general have opener character than the women. We set up a t-test and make the hypothesis, H0: Man and women have no difference. HA : Man and women have big difference. If the result is: t score=1.35, p=0.91. what can we know about this research?
+
+Man and women have no big difference 
+Man and women have big difference for sure
+Man and women have small difference 
+Nothing can we conclude
+None of them is right
+
+
+8  Which the following statement about paired data is right?
+
+To analyze a paired data set, we simply analyze the difference
+If the data is not independent, we can still use t-test to analyze
+If the size of two dataset are not same, we can not pair them
+Two sets of observations are paired if each observation in one set has a special correspondence or connection with many other observations in the other data set.
+None of them is right
+
+
+9  What is not the condition on the data before performing ANOVA?
+
+
+The size of the groups must be equal
+The observations are independent within and across groups
+The data within each group are nearly normal
+The variability across the groups is about equal
+None of them
+
+
+10  What is the difference between ANOVA test and t-test?
+The t-test is a method that determines whether two populations are statistically different from each other, whereas ANOVA determines three or more populations
+The observations of ANOVA must be independent while t-test not
+The data of ANOVA within each group are nearly normal while t-test not
+ANOVA test is more accurate than t-test
+No difference
+
+
+11 
+12
+13
+14
+15

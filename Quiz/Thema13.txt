@@ -1,0 +1,124 @@
+R4ds 11,12
+
+
+1 We have a CSV file which is saved in our disk looks like this, to read this file to our R workspace, which code is right?
+
+https://study.com/academy/lesson/acquiring-data-using-readcsv-readcsv2-functions-in-r.html
+
+
+read.csv(file = ''your_file_path'')
+read.csv2(file = ''your_file_path'')
+read.tsv(file = ''your_file_path'')
+read.log(file = ''your_file_path'')
+None of them
+
+
+
+
+2 We have a CSV file which is saved in our disk looks like this, to read this file to our R workspace, which code is right?
+
+https://study.com/academy/lesson/acquiring-data-using-readcsv-readcsv2-functions-in-r.html
+
+read.csv2(file = ''your_file_path'')
+read.csv(file = ''your_file_path'')
+read.tsv(file = ''your_file_path'')
+read.log(file = ''your_file_path'')
+None of them
+
+
+
+
+
+3 What do you do if your data doesn't quite match those default arguments for read.csv or read.csv2? In this case, you can add arguments into your function to accommodate the formatting in your CSV file. Let's say, for example, your CSV file has no header row. then what can you do with that?
+
+
+
+https://study.com/academy/lesson/acquiring-data-using-readcsv-readcsv2-functions-in-r.html
+
+my_csv_noheader <- read.csv(file = ''your_file_path'', header = FALSE)
+my_csv_noheader <- read.csv(file = ''your_file_path'', header = TRUE)
+my_csv_noheader <- read.csv2(file = ''your_file_path'', header = FALSE)
+my_csv_noheader <- read.Tsv(file = ''your_file_path'', header = FALSE)
+None of them
+
+
+4 Which the following outcome in console you will get if we have: parse_integer(c("TRUE","678","2021-04-30"))
+
+NA 678  NA
+TRUE 678 2021-04-30
+NA 678 2021-04-30
+NA NA NA
+TRUE 678 NA
+
+
+
+5 Which the following outcome in console you will get if we have: 
+parse_number("it cost 20% of the original price")
+
+20
+20%
+it cost 20% of the original price
+it cost 20 of the original price
+None of them
+
+
+
+6  Which the following outcome in console you will get if we have: 
+parse_datetime("20201010")
+
+
+2020-10-10 UTC
+2020-10-10 
+10-10-2020
+10-10-2020 UTC
+None of them
+
+
+
+
+7 To export the "mtcars" dataset in csv with its new name "mtcars-cleaned", which the following code is right?  
+
+write.csv(mtcars, file = 'mtcars-cleaned.csv')
+write.csv(file = 'mtcars-cleaned.csv')
+write.csv('mtcars-cleaned.csv')
+write.excel.csv(mtcars, file = 'mtcars-cleaned.csv')
+None of them
+
+
+
+
+8  Which the following statement is not one of the three interrelated rules that make a dataset tidy?
+
+Each variable must have its value, that means NA is not acceptable
+Each variable must have its own column.
+Each observation must have its own row.
+Each value must have its own cell.
+None of them
+
+
+
+
+
+9 If we want tidy the dataset "example_eagle_nests" from the left table to the right table, which the following code is right?
+https://dcl-wrangle.stanford.edu/pivot_basic.html#missing-values
+
+
+example_eagle_nests %>%  pivot_longer(cols = c(`2007`, `2009`), names_to = "year", values_to = "num_nests")
+example_eagle_nests %>%  pivot_wider(cols = c(`2007`, `2009`), names_to = "year", values_to = "num_nests")
+example_eagle_nests %>%  pivot_longer(cols = c(`2007`, `2009`), names_to = c("year"), values_to = "num_nests")
+example_eagle_nests %>%  pivot_longer(cols = c(`2007`, `2009`), names_to = "year", values_to = c("num_nests"))
+None of them
+
+
+
+10 To turn explicit missing values implicit, which the following code is right?
+
+https://dcl-wrangle.stanford.edu/pivot_basic.html#missing-values
+
+
+
+example_migration %>% pivot_longer(cols = -dest,  names_to = "origin", values_to = "migrants", values_drop_na = TRUE) 
+example_migration %>% pivot_longer(cols = -dest,  names_to = "origin", values_to = "migrants", values_delete_na = TRUE) 
+example_migration %>% pivot_longer(cols = -dest,  names_to = "origin", values_to = "migrants", delete_na = TRUE) 
+example_migration %>% pivot_longer(cols = -dest,  names_to = "origin", values_to = "migrants", drop_na = TRUE) 
+None of them

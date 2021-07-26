@@ -1,0 +1,157 @@
+R4ds 23
+
+
+1  Fit a linear model to the simulated data below, and visualise the results(scatterplot). Hint: rt() function in R is used to create a random sequence of values from Student t-distribution.
+
+sim1a <- tibble(x = rep(1:15, each = 4), y = x * (-4) + 5 + rt(length(x), df = 2))
+
+https://r4ds.had.co.nz/model-basics.html#exercises-63
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-basics.Rmd
+
+
+ggplot(sim1a, aes(x = x, y = y)) +geom_point() +geom_smooth(method = "lm", se = FALSE)
+ggplot(sim1a, aes(x = x, y = y)) +geom_boxplot() +geom_smooth(method = "lm", se = FALSE)
+ggplot(sim1a, aes(x = x, y = y)) +geom_histogram() +geom_smooth(method = "lm", se = FALSE)
+ggplot(sim1a, aes(x = x, y = y)) +geom_point() 
+None of them
+
+
+
+
+2 Following the last question, based on "sim1a <- tibble(x = rep(1:15, each = 4), y = x * (-4) + 5 + rt(length(x), df = 2))", using function map_df()to generate different simulated datasets. We want generate 12 cases.To make it happen, which the following code is right?
+
+Hint: this question is not the exam(final project) relevant, reference can be found in r4ds book Chapter 23 or using ?map() in r to check out.
+
+https://r4ds.had.co.nz/model-basics.html#exercises-63
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-basics.Rmd
+
+
+sims <- map_df(1:12, simla)
+ggplot(sims, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", colour = "red")+facet_wrap(~.id, ncol=4)
+
+
+sims <- map_df(12, simla)
+ggplot(sims, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", colour = "red")+facet_wrap(~.id, ncol=4)
+
+sims <- map_df(12)
+ggplot(sims, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", colour = "red")+facet_wrap(~.id, ncol=4)
+
+
+sims <- map_df(1-12)
+ggplot(sims, aes(x = x, y = y)) +
+  geom_point() +
+  geom_smooth(method = "lm", colour = "red")+facet_wrap(~.id, ncol=4)
+
+None of them
+
+
+
+
+3  Following the last question. After rerun a few times to generate different simulated dataset. We did the same things with normal distributions and get following plots. What do you notice about the model? 
+
+
+https://r4ds.had.co.nz/model-basics.html#exercises-63
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-basics.Rmd
+
+
+There are not large outliers, and the slopes are more similar.
+There are large outliers, and the slopes are more similar.
+There are large outliers, and the slopes are less similar.
+There are not large outliers, and the slopes are less similar.
+None of them
+
+
+
+explaination(
+The reason for this is that the Student's $t$-distribution, from which we sample with `rt()` has heavier tails than the normal distribution (`rnorm()`). This means that the Student's t-distribution
+assigns a larger probability to values further from the center of the distribution.)
+
+
+
+4 R has a tool specifically designed for fitting linear models called lm(). If we have the dataset: mpg, with x and y. How to fit the model? (Reference can be found in r4ds Chapter 23)
+
+mpg_mod <- lm(y ~ x, data = mpg)
+mpg_mod <- lm(y ~ x)
+mpg_mod <- lm(y = x, data = mpg)
+mpg_mod <- lm(y = x+b, data = mpg)
+None of them
+
+
+
+5 Instead of using geom_abline(), to draw a line that describe the trend of prediction. The first step is to generate a data grid. If we have the dataset: mpg, with x and y, and a prediction model: mpg_mod. which the following code can be used? (Reference can be found in r4ds Chapter 23)
+
+
+grid <- mpg %>% data_grid(x) 
+grid <- mpg %>% add_grid(x) 
+grid <- mpg %>% add(x) 
+grid <- mpg %>% grid(x) 
+None of them
+
+
+6 Instead of using geom_abline(), to draw a line that describe the trend of prediction. After generating a data grid, the second step is to add the prediction into the grid, then which the following code can be used? (Reference can be found in r4ds Chapter 23)
+
+grid <- grid %>% add_predictions(mpg_mod) 
+grid <- grid %>% add(mpg_mod) 
+grid <- grid %>% attach_predictions(mpg_mod) 
+grid <- grid %>% attach(mpg_mod) 
+None of them
+
+
+
+
+
+
+7 Instead of using geom_abline(), to draw a line that describe the trend of prediction. After generating a data grid, adding the prediction into the grid, the last step is to draw the plot, which the following code can be used? (Reference can be found in r4ds Chapter 23)
+
+
+ggplot(mpg, aes(x)) + geom_point(aes(y = y)) +geom_point(data = grid, aes(y = pred), colour = "red", size = 4)
+ggplot(grid, aes(x)) + geom_point(aes(y = y)) +geom_point(data = grid, aes(y = pred), colour = "red", size = 4)
+ggplot(grid, aes(x)) + geom_point(aes(y = y)) +geom_point(data = mpg, aes(y = pred), colour = "red", size = 4)
+ggplot(mpg, aes(x)) + geom_point(aes(y = y)) +geom_point(data = mpg, aes(y = pred), colour = "red", size = 4)
+None of them
+
+
+8 If we have y = a_0 + a_1 * x1 + a_2 * x2 + a_12 * x1 * x2, what does that mean in r? (Reference can be found in r4ds Chapter 23)
+
+lm(y ~ x1 * x2)
+lm(y ~ x1 + x2)
+lm(y ~ x1 + x2 + x1 * x2)
+lm(y ~ x1 / x2)
+None of them
+
+
+9 Which the following transformation of log(y) = a_1 + a_2 * sqrt(x1) + a_3 * x2 is right? (Reference can be found in r4ds Chapter 23)
+log(y) ~ sqrt(x1) + x2 
+log(y) ~ sqrt(x1+x2)
+lm(y ~ sqrt(x1) + x2)
+lm(y ~ sqrt(x1+x2) 
+None of them
+
+
+
+
+10 What can you tell from the following plot? (Reference can be found in r4ds Chapter 23)
+
+mod1 <- lm(y ~ x1 + x2, data = sim3)
+mod1 <- lm(y ~ x1 + x2 + x1 * x2, data = sim3)
+mod1 <- lm(y ~ x1 * x2, data = sim3)
+mod2 <- lm(y ~ x1 + x2, data = sim3)
+None of them
+
+
+
+
+
+
+
+
+
+
+
+

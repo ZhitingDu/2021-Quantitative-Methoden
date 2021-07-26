@@ -1,0 +1,154 @@
+R4ds 24
+
+
+1 In the plot of lcarat vs. lprice, there are some bright vertical strips. What do they represent? (Exercise can be found in r4ds chapter24.2.3)
+
+https://r4ds.had.co.nz/model-building.html#exercises-66
+https://brshallo.github.io/r4ds_solutions/24-model-building.html
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-building.Rmd
+
+The vertical bands correspond with more amount clumps of carat_lg values falling across a range of price_lg values
+The vertical bands correspond with more clumps of price_lg  values falling across a range of carat_lgvalues
+The vertical bands correspond with less amount clumps of carat_lg values falling across a range of price_lg values
+The vertical bands correspond with less clumps of price_lg  values falling across a range of carat_lgvalues
+None of them
+
+
+
+
+2 If log(price) = a_0 + a_1 * log(carat), what does that say about the relationship between price and carat?(Exercise can be found in r4ds chapter24.2.3)
+
+https://r4ds.had.co.nz/model-building.html#exercises-66
+https://brshallo.github.io/r4ds_solutions/24-model-building.html
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-building.Rmd
+
+It means that an a_1 percentage change in carat corresponds with an a_1 percentage increase in the price
+It means that an a_1 percentage change in price corresponds with an a_1 percentage increase in the carat
+It means that an a_1's unit change in carat corresponds with an a_1's unit increase in the price
+It means that an a_1's unit change in price corresponds with an a_1's unit increase in the carat
+None of them
+
+
+
+
+3 As the following plot shows, the orange points represent the diamonds that have very high and very low residuals. Is there anything unusual about these diamonds, what can you tell from the plot? (Exercise can be found in r4ds chapter24.2.3)
+
+https://r4ds.had.co.nz/model-building.html#exercises-66
+https://brshallo.github.io/r4ds_solutions/24-model-building.html
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-building.Rmd
+
+Nothing is unusual
+Something is unusual
+There will be a big mistake, if for instance, price 200 miswrote by 2000
+Can not tell anything
+None of them
+
+
+
+4 To determine a final model "mod_diamond2" do a good job of predicting diamond prices or not, which the following term can not be used? 
+
+(Exercise can be found in r4ds chapter24.2.3)
+
+https://r4ds.had.co.nz/model-building.html#exercises-66
+https://brshallo.github.io/r4ds_solutions/24-model-building.html
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-building.Rmd
+
+Mean
+Variance
+RMSE(root mean squared error) 
+MAE(mean absolute error)
+None of them
+
+
+
+5  The following plot shows the comparison among the models with every combination of wday and term. Which the following statement is right?
+
+(Exercise can be found in r4ds chapter24.3.5)
+
+https://r4ds.had.co.nz/model-building.html#exercises-67
+https://brshallo.github.io/r4ds_solutions/24-model-building.html#section-91
+
+In the example_term_with_sat plot, Saturday has different predicted number of flights in the summer
+When just including wkday you can see the differentiation in Saturday in the period of one year
+You see decreases in flights across pretty much all wdays in summer, though you see the biggest difference in Saturday
+When including wkday and term you see differentiation in the summer, though this difference is the same across all wdays, hence the increased number for Saturday’s is more than it shows-up as as compared to either the example 
+None of them
+
+
+
+
+6 Following the last question, below is the residual plot for each comparison among the models with every combination of wday and term. Which the following statement is right?
+
+(Exercise can be found in r4ds chapter24.3.5)
+
+https://r4ds.had.co.nz/model-building.html#exercises-67
+https://brshallo.github.io/r4ds_solutions/24-model-building.html#section-91
+
+
+The graphs with saturday term and interaction across terms do not show gross changes in residuals varying by season 
+The graphs with just weekday or weekday and term without an interaction show gross changes in residuals varying by season 
+There are many days (more than half) with large negative residuals
+Can not tell anything
+All of them
+
+
+
+
+7 What happens if you fit a day of week effect that varies by month (i.e. n ~ wday * month)? Why is this not very helpful?
+
+(Exercise can be found in r4ds chapter24.3.5)
+
+https://r4ds.had.co.nz/model-building.html#exercises-67
+https://brshallo.github.io/r4ds_solutions/24-model-building.html#section-91
+https://github.com/jrnold/r4ds-exercise-solutions/blob/master/model-building.Rmd
+
+
+This model has the most flexibility / inputs, though this makes the pattern harder to follow / interpret
+This model has the most flexibility / inputs, though this makes the pattern easy to follow / interpret
+There are only 4-5 week days in each month, so a holiday on one of these can not impact the expected number of flights on the weekend in that month
+Can not tell anything
+None of them
+
+
+
+8 Plotting partial residuals on top of the estimated marginal means allows detecting missed modeling, like unmodeled non-linear relationships or unmodeled interactions. In a nutshell, it allows Visualizing Fit and Lack of Fit in Complex Regression Models with Predictor Effect Plots and Partial Residuals (Fox & Weisberg 2018).
+
+What can you tell from the following residual plot? (Blue curve represent residual)
+
+https://cran.r-project.org/web/packages/ggeffects/vignettes/introduction_partial_residuals.html
+https://www.jstatsoft.org/article/view/v087i09
+
+
+The model has not a linear relationship
+The model has a linear relationship
+The model has a weak linear relationship
+Can not tell anything
+None of them
+
+
+
+9 Here is another example, which shows that the partial residuals plot suggests modeling an interaction, which of the following plot is the result of modeling the interaction?
+
+https://cran.r-project.org/web/packages/ggeffects/vignettes/introduction_partial_residuals.html
+https://www.jstatsoft.org/article/view/v087i09
+
+The second one
+The first one
+Can not tell anything
+None of them
+Both of them
+
+
+
+ 
+10 This question is about transformation. (Standardization and Resolving Skewness). If a variable in a dataset is right skewed and contains values 0, which the following function will you use to do the transformation?
+
+https://cran.r-project.org/web/packages/dlookr/vignettes/transformation.html
+
+“log+1”
+“log” 
+“sqrt” 
+“1/x” 
+None of them
+
+

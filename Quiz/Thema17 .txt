@@ -1,0 +1,111 @@
+Arm 4
+
+
+1 Which the following saying regarding linear transformation is right ?
+Reference can be found in ARM 4.1 
+
+All of these
+linear transformation will not affect the fit of a regression model
+linear transformation will not affect the predictors
+linear transformation can help to better interpret the coefficients
+None of these
+
+
+2 If we have a model: Score = 30 + 20 * study time + error, with a residual standard deviation of 800. Comparing to 800, the coefficient 20 can not precisely represent the difference of score when a difference of 1 unit in study time take place. To interpret the coefficients better, which the following scaling measures of predictors could we use?
+
+Reference can be found in ARM 4.1 
+
+All of these
+Consider the standard deviation of studytime
+Use "Z-score"
+Use reasonable scales of inputs
+None of these
+
+
+
+
+3 Understanding Z-score. Which the following saying is right?
+Reference can be found in ARM 4.1 
+
+All of these
+z = (x – μ)/σ, μ is the mean of the population. σ is the standard deviation of the population.
+The standard deviation is the unit of measurement of the z-score
+Z-score is a way to compare results to a “normal” population
+None of these
+
+
+
+
+4 What will happen if we standardise for models with interactions?
+Reference can be found in ARM 4.2
+
+None of these
+Residual standard deviation will be changed
+R2 will be changed
+Coefficient for the interaction will be changed
+The main effects and the intercept will stay the same
+
+
+
+
+5 A single predict model: y=a+bx+error, if x and y are both standardised, which the following saying regarding "regression to the mean" is right?
+Reference can be found in ARM 4.3
+
+The regression slope range between -1 and 1
+The regression intercept is the correlation between x and y 
+x is predicted to be closer to the mean than y
+None of these
+All of these
+
+
+6 To judge statistical significance, what can you tell from the following result?
+Reference can be found in ARM 4.4
+
+
+Predictors: fear, cons1 and extra2 have highly statistical significance
+Predictors: extra1, open1 and open2 have highly statistical significance
+Predictors: extra1 and neuro2 have highly statistical significance
+None of these
+Nothing can tell
+
+
+7 Log transform supports which the following form?
+Reference can be found in ARM 4.4
+
+
+All of these
+lm (Log (y) ~ log (x))
+lm(y ~ log (x))
+lm (Log (y) ~ x)
+None of these
+
+
+
+
+8  If study time =1 means no study everyday, study time =2 means study 1-3 hours everyday, study time =3 means study 4-5 hours everyday, which the following syntax is right, to fit a simple model using discrete predictors yields?
+Reference can be found in ARM 4.5
+
+lm(score ~ as.factor(study time), data = research)
+lm(score ~ study time, data = research)
+lm(score ~ log(study time), data = research)
+lm(score ~ ln(study time), data = research)
+None of these
+
+
+
+9 Which the following saying is the general principles for building regression models for prediction?
+Reference can be found in ARM 4.6
+
+All of these
+Include all input variables that, for substantive reasons, might be expected tobe important in predicting the outcome.
+It is not always necessary to include these inputs as separate predictors—forexample, sometimes several inputs can be averaged or summed to create a “totalscore” that can be used as a single predictor in the model.
+For inputs that have large effects, consider including their interactions as well.
+None of these
+
+
+
+
+10 
+Reference can be found in ARM 4.7
+
+

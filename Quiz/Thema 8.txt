@@ -1,0 +1,148 @@
+1 Is this plot has a linear relationship?
+
+No, it is not linear
+Yes, it is linear, and a positive relationship
+Yes, it is linear, and a negative relationship
+No relationship can be found
+None of these is right
+
+2 We want to predict the linear relationship between study hour per day (x) and the final score (y). The equation is: y= 70+0.8x. If a student study 2 hours a day. What is the expected score he will have?
+
+71.6
+72.6
+73.6
+74.6
+75.6
+
+3 Which statement regarding residual is right ?
+
+The smaller the residual is, the better the expectation is
+Residual = Data + Fit
+If an observation is above the regression line, the residual is negative
+If an observation is under the regression line, the residual is positive
+None of these is right
+
+4 In this correlation plot, which one is the low positive correlation?
+
+Left
+Middle
+Right
+No positive correlation can be found
+None of these is right
+
+
+5 What is not the condition for the least squares line?
+
+The sample size must be larger than 30
+Linearity
+Nearly normal residuals
+Constant variability
+Independent observations
+
+6 Which line appears to be a better summary of the linear pattern in the data?
+
+Source from : https://courses.lumenlearning.com/wmopen-concepts-statistics/chapter/linear-regression-2-of-4/
+
+
+Right
+Left
+Same
+Can not know
+None of these is right
+
+
+7 If x is the sample mean of the explanatory variable and y is the sample mean of the verticalvariable, then the point (x; y) is ?
+
+On the least squares line
+Above the least squares line
+Under the least squares line
+Can not know
+None of these is right
+
+
+8 What is the equation of the least squares regression line?
+Variable x : 2,7,25,13,4,15,33,10,19,27
+Variable y : 16,19,22,21,19,19,26,21,22,25
+
+Source from : https://brainly.com/question/17695497?exp=25-1
+
+y= 0.26x+16.9
+y= 0.26x-16.9
+y= 0.36x-16.9
+y= 0.36x+16.9
+y= 0.36x+17.9
+
+
+9 Which the following statement about R-squared is right ?
+
+R-squared values range from 0 to 1 
+The closer R-Squared is to 0 the better our model will be at predicting our dependent variable
+R-squared = SSresidual/SStotal
+R-squared = SStotal/SSresidual
+None of these is right
+
+
+10 In the following residual plots, which one is the plot we want to see when we evaluate how well a linear model fits a data set?
+
+The fourth one
+The third one
+The second one
+The first one
+None of them
+
+11 This data approach student achievement in secondary education. The data attributes include student grades, demographic, social and school related features. G3 is the final year grade (issued at the 3rd period), while G1 and G2 correspond to the 1st and 2nd period grades. From the second plot, what can you know about the correlation ?
+
+ Source from :https://archive.ics.uci.edu/ml/datasets/Student+Performance
+
+The grade of each year has a high correlation among each other
+Though the students have higher grade still has a positive correlation with failures
+The good health can also help students have better grade
+The more free time the students have, the better grade they will get
+None of these is right
+
+
+
+12 This data approach student achievement in secondary education. The data attributes include student grades, demographic, social and school related features. G3 is the final year grade (issued at the 3rd period), while G1 and G2 correspond to the 1st and 2nd period grades. If the data is divided into two parts based on age, test sample is 30% of
+ the total, train sample is the 70% of the total. We set up a model using the train data set. Which the following explanation is right ?
+
+Source from :https://archive.ics.uci.edu/ml/datasets/Student+Performance
+
+Absences can be seen have positive contribution for the prediction
+G1, G2 can not be seen have positive contribution for the prediction
+Age for the prediction have less influence
+Overall, consider the result base on these all attributes, we can not have a good prediction for the final year grade
+None of these is right
+
+
+
+13 This data approach student achievement in secondary education. The data attributes include student grades, demographic, social and school related features. G3 is the final year grade (issued at the 3rd period), while G1 and G2 correspond to the 1st and 2nd period grades. If the data is divided into two parts based on age, test sample is 30% of the total, train sample is the 70% of the total. After setup the model, we want to evaluate how well this linear model fits the data set.  What can you know from this residual histogram ?
+
+Source from :https://archive.ics.uci.edu/ml/datasets/Student+Performance
+
+The residual plot displayed in a roughly normal distribution
+Less extreme outliers can be found
+These extreme outliers can not be seen as influential points
+These extreme outliers can be directly removed
+None of these is right
+
+
+
+14  This data approach student achievement in secondary education. The data attributes include student grades, demographic, social and school related features. G3 is the final year grade (issued at the 3rd period), while G1 and G2 correspond to the 1st and 2nd period grades. If the data is divided into two parts based on age, test sample is 30% of the total, train sample is the 70% of the total. Now we want to exam the model of the train sample with the test sample by using software. If the result is R square = 0.77. What das that mean?
+
+Source from :https://archive.ics.uci.edu/ml/datasets/Student+Performance
+
+The model can good fit to the data set
+The model can exactly fit to the data set
+The model can not fit to the data set
+This result can not explain anything
+None of these is right
+
+
+15 What is not the measurement to describe the strength of a fit ?
+
+The amount of outliers
+R-square
+MSE (Mean square error)
+Categorical variables
+None of these
+

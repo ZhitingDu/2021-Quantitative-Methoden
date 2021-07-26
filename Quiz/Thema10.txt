@@ -1,0 +1,105 @@
+1 Which R code is the right one to get the following histogram?
+
+Dataset: mpg
+
+ggplot(mpg,aes(x=hwy)) + geom_histogram(bins=20,fill='red',alpha=0.5)
+ggplot(mpg,aes(x=hwy)) + geom_histogram(bins=20,fill='red')
+ggplot(mpg,aes(x=hwy)) + geom_histogram(bins=40,fill='red',alpha=0.5)
+ggplot(mpg,aes(x=hwy)) + geom_histogram(bins=40,fill='red')
+ggplot(mpg,aes(x=hwy)) + geom_histogram(bins=20)
+
+2 The dataset we use for this question is still "mpg".If we want to describe, 
+How many cars each manufacturer has according to the number of cyl, using bar plot distinguished by different colors. Which the following code can achieve that ?
+
+ggplot(mpg,aes(x=manufacturer)) + geom_bar(aes(fill=factor(cyl))) 
+ggplot(mpg,aes(x=manufacturer)) + geom_bar(aes(fill=cyl)) 
+ggplot(mpg,aes(x=manufacturer)) + geom_histogrm(aes(fill=factor(cyl))) 
+ggplot(mpg,aes(x=manufacturer)) + geom_histogrm(aes(fill=cyl))
+None of these
+
+3 Which R code is the right one to get the following plot?
+
+Dataset: txhousing
+
+ggplot(txhousing,aes(x=sales,y=volume)) + geom_point(color='blue',alpha=0.5)
+ggplot(txhousing,aes(x=sales,y=volume)) + geom_point(color='blue')
+ggplot(txhousing,aes(x=sales,y=volume)) + geom_point(alpha=0.5)
+ggplot(txhousing,aes(x=sales,y=volume)) + geom_col(color='blue',alpha=0.5)
+None of these
+
+4 Continue to the last question. What do we need to add in order to draw a red color trend line based on the last scatterplot ?
+
+
+geom_smooth(color='red')
+geom_line(color='red')
+geom_abline(color='red')
+geom_curve(color='red')
+None of these
+
+5 If we want to convert the left plot to the right plot, which the following R code will make it happen?
+
+coord_flip()
+coord_quickmap()
+coord_polar()
+coord_map()
+coord_flixed()
+
+6  If we want to set the aspect ratio of the diagram(default is 1:1), which the following R code will make it happen?
+
+coord_flixed()
+coord_flip()
+coord_quickmap()
+coord_polar()
+coord_map()
+
+7 The following table is a research dataset from The Economist that want to explore the relationship between HDI and CPI among each country. HDI: Human Development Index, CPI: Corruption Perceptions Index. If we want to display the correlation between HDI and CPI using scatterplot like the following plot, which the following R code is right ?
+
+Data source from: https://www.economist.com/graphic-detail/2011/12/02/corrosive-corruption
+
+pl <- ggplot(df,aes(x=CPI,y=HDI,color=Region)) + geom_point(size=4,shape=1)
+pl <- ggplot(df,aes(x=CPI,y=HDI,color=factor(Region))) + geom_point(size=4,shape=1)
+pl <- ggplot(df,aes(x=CPI,y=HDI,color=Region)) + geom_density()
+pl <- ggplot(df,aes(x=CPI,y=HDI,color=Region)) + geom_col()
+pl <- ggplot(df,aes(x=CPI,y=HDI,color=Region)) + geom_hitogram()
+
+8  The following table is a research dataset from The Economist that want to explore the relationship between HDI and CPI among each country. HDI: Human Development Index, CPI: Corruption Perceptions Index. Based on the last question, how can we get the following plot ?
+
+Data source from: https://www.economist.com/graphic-detail/2011/12/02/corrosive-corruption
+
+pl2 <- pl + geom_smooth(aes(group=1))
+pl2 <- pl + geom_line(aes(group=1))
+pl2 <- pl + geom_abline(aes(group=1))
+pl2 <- pl + geom_curve(aes(group=1))
+None of these
+
+9 The following table is a research dataset from The Economist that want to explore the relationship between HDI and CPI among each country. HDI: Human Development Index, CPI: Corruption Perceptions Index. Based on the last question, we want to add the label of each country in the plot, then which one is right ?
+
+Data source from: https://www.economist.com/graphic-detail/2011/12/02/corrosive-corruption
+
+pl2 + geom_text(aes(label=Country))
+pl2 + ggtitle(aes(label=Country))
+pl2 + scale_x_continuous(aes(label=Country))
+pl2 + scale_y_continuous(aes(label=Country))
+None of these
+
+
+10 The following table is a research dataset from The Economist that want to explore the relationship between HDI and CPI among each country. HDI: Human Development Index, CPI: Corruption Perceptions Index. Based on the last question, we want to refine the label, ideally is the following plot we want to display, then how to achieve it?
+
+Hint: To simplify the labels, first, we choose a group of the labels we want to show, like:
+
+pointsToLabel <- c("Russia", "Venezuela", "Iraq", "Myanmar", "Sudan",
+                   "Afghanistan", "Congo", "Greece", "Argentina", "Brazil",
+                   "India", "Italy", "China", "South Africa", "Spane",
+                   "Botswana", "Cape Verde", "Bhutan", "Rwanda", "France",
+                   "United States", "Germany", "Britain", "Barbados", "Norway", "Japan",
+                   "New Zealand", "Singapore")
+
+Data source from: https://www.economist.com/graphic-detail/2011/12/02/corrosive-corruption
+
+pl3 <- pl2 + geom_text(aes(label = Country), color = "gray20", data = subset(df, Country %in% pointsToLabel),check_overlap = TRUE)
+pl3 <- pl2 + geom_text(aes(label = Country), color = "gray20", data = select(df, Country %in% pointsToLabel),check_overlap = TRUE)
+pl3 <- pl2 + geom_text(aes(label = Country), color = "gray20", data = filtert(df, Country %in% pointsToLabel),check_overlap = TRUE)
+pl3 <- pl2 + geom_text(aes(label = Country), color = "gray20", data = slice(df, Country %in% pointsToLabel),check_overlap = TRUE)
+None of these
+
+
