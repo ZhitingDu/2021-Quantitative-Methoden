@@ -1,0 +1,240 @@
+
+
+```{r}
+
+library(tidyverse)
+```
+
+```{r}
+read.csv()
+```
+
+
+
+## Overview
+check first 6 lines of the dataset
+```{r}
+head(loans_full_schema)
+```
+
+```{r}
+skim(loans_full_schema)
+```
+        
+##  Dataset division in Train and Test
+
+
+select only 1000 lines of data
+```{r}
+loans_full_schema <- loans_full_schema %>%
+  slice(1:1000)
+loans_full_schema
+```
+
+```{r}
+
+train <-  slice_sample(loans_full_schema, prop=.75)
+train
+```
+
+
+
+```{r}
+test <- anti_join(loans_full_schema, train, by="emp_title")
+test
+```
+##  Train,test data adjustment (only for this dataset case as it is sooo huge)
+
+
+update the train data contains following variables: verified_income, debt_to_income, issue_month, annual_income, total_credit_utilized and total_credit_limit
+```{r}
+train <- train %>%
+  select(emp_title,interest_rate, verified_income, debt_to_income, issue_month,annual_income,total_credit_utilized, total_credit_limit) 
+train
+```
+
+```{r}
+
+test <- test %>%
+  select(emp_title,interest_rate, verified_income, debt_to_income, issue_month,annual_income,total_credit_utilized, total_credit_limit) 
+test
+```
+
+
+
+##  Drop Missing values which are not so much large amount compare to the whole sample (<10%)
+
+```{r}
+skim(train)
+```
+
+
+```{r}
+train <- 
+  train %>%
+  drop_na(debt_to_income )
+
+```
+`
+
+
+
+##  Reshaping the data (pivot_longer)
+```{r}
+pivot <-
+select_if(train,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable")
+  # everything() is a convenient shorthand to pivot all variables. pivot_longer(everything()) https://jhudatascience.org/tidyversecourse/wrangle-data.html
+pivot
+```
+
+
+## Check outliers in outcome (interest_rate)  using boxplot
+```{r}
+pivot %>%
+  ggplot(aes(x = value)) +
+  geom_boxplot() +
+  facet_wrap(~ variable, scales = "free")
+```
+
+## Check outliers in outcome(interest_rate) using Z value
+
+
+z=(x-mean)/sd
+```{r}
+outliers<-
+train %>%
+mutate(interestrate_z = (interest_rate - mean(interest_rate, na.rm = TRUE)) /
+sd(interest_rate, na.rm = TRUE)) %>%
+mutate(is_extreme = if_else(abs(interestrate_z) > 3, TRUE, FALSE)) %>%
+count(is_extreme)
+```
+
+
+```{r}
+outliers
+```
+TRUE: outliers
+FALSE : not outliers
+
+
+
+
+## Drop outliers in outcome (filter)
+```{r}
+train_outliers <- train%>%mutate(interestrate_z = (interest_rate - mean(interest_rate, na.rm = TRUE)) /
+sd(interest_rate, na.rm = TRUE)) %>%
+mutate(is_extreme = if_else(abs(interestrate_z) > 3, TRUE, FALSE))
+train_outliers
+```
+
+
+
+
+
+```{r}
+train <-
+  train_outliers %>% 
+  filter(is_extreme==FALSE)
+train
+```
+
+##  Distribution of outcome
+
+```{r}
+train%>%
+ggplot(aes(x=interest_rate)) + geom_histogram()
+```
+
+##  Distribution of all predictors 
+
+```{r}
+
+  ggplot(pivot,aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(~ variable, scales = "free")
+```
+
+## Transform  (via logarithm)
+```{r}
+train<- train%>%
+  mutate(annual_income_log10=log10(annual_income),total_credit_limit_log10=log10(total_credit_limit))
+train
+```
+
+```{r}
+train_new <- train%>% select(-interestrate_z,-emp_title)
+train_new
+```
+
+
+
+#  Model
+##  The regsubsets() function  (best sample)
+(part of the leaps library) performs best subregsubsets()
+set selection by identifying the best model that contains a given number
+of predictors, where best is quantified using RSS
+From: ISLR Book 6.5
+
+
+```{r}
+library (leaps)
+model <- regsubsets (interest_rate ~., train_new, really.big=T)
+summary (model)
+```
+
+```{r}
+
+reg.summary =summary (model)
+names(reg.summary)
+```
+
+
+```{r}
+reg.summary$adjr2
+```
+## Model1
+```{r}
+model1 <- lm(interest_rate ~ verified_income + debt_to_income + total_credit_utilized +total_credit_limit+ annual_income_log10 + total_credit_limit_log10  ,data = train_new )
+```
+
+```{r}
+summary(model1)
+```
+## Model2
+```{r}
+model2 <- lm(interest_rate ~ verified_income + debt_to_income + total_credit_utilized +total_credit_limit+ annual_income_log10 + total_credit_limit_log10 + total_credit_utilized:verified_income ,data = train_new )
+summary(model2)
+```
+
+
+#  Prediction
+
+## log transform also in test data (as in the model contains log vaoriables)
+```{r}
+test<- test%>%
+  mutate(annual_income_log10=log(annual_income),total_credit_limit_log10=log(total_credit_limit))
+
+test
+```
+
+```{r}
+pred <- predict(model2, newdata = test)
+head(pred)
+```
+
+
+```{r}
+test2 <- mutate(test, pred)
+test2
+
+
+
+```
+
+```{r}
+handover<- select(test2, pred,emp_title)
+handover
+```
+
+

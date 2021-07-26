@@ -1,0 +1,202 @@
+---
+title: "Exercise_ggplot"
+author: "dzt"
+date: "4/20/2021"
+output: html_document
+---
+
+## 1. Load package ggplot and the dataset "movies" from the package, and have a look at the dataset
+
+```{r}
+library(ggplot2)
+library(ggplot2movies)
+library(dplyr)
+glimpse(movies)
+```
+Data description:
+
+title. Title of the movie.
+
+year. Year of release.
+
+budget. Total budget (if known) in US dollars
+
+length. Length in minutes.
+
+rating. Average IMDB user rating.
+
+votes. Number of IMDB users who rated this movie.
+
+r1-10. Multiplying by ten gives percentile (to nearest 10\%) of users who rated this movie a 1.
+
+mpaa. MPAA rating.
+
+action, animation, comedy, drama, documentary, romance, short. Binary variables representing if movie was classified as belonging to that genre.
+
+
+## 2. Draw a rating distribution in histogram
+```{r}
+
+h1<- ggplot(movies,aes(x=rating))+geom_histogram()
+h1
+```
+
+
+
+## 3.  Follwing the last question, change the histogram in green colour with the outline and fill out with grey colour
+```{r}
+
+h2<- h1+geom_histogram(color="green", fill="grey")
+h2
+```
+
+## 4.  Bar: display a bar of distribution of MPAA
+
+```{r}
+library(tidyverse)
+movies1<-drop_na(movies, mpaa)
+b1 <- ggplot(movies1,aes(x = mpaa)) + geom_bar(fill="chocolate") 
+b1
+
+
+ 
+```
+
+
+
+
+
+##   Difference between BAR and HISTOGRAM:
+
+
+- The Histogram refers to a graphical representation that shows data by way of bars to display the frequency of numerical data whereas the Bar graph is a graphical representation of data that uses bars to compare different categories of data.
+
+
+- Histogram used for distribution of non-discrete variables while Bar Graph is used for comparison of discrete variables .
+
+- In Histogram, we cannot rearrange the blocks while in Bar Charts, it is common to rearrange the blocks, from highest to lowest.
+
+- Histogram used for displaying the frequency of occurrences and Bar Plots helps you to compare different categories of data.
+<https://www.guru99.com/histogram-vs-bar-chart.html>
+
+
+
+
+
+
+## 5. Draw a scatterplot to describe the relationship between rating and the length of the movies(x is the length, y is the rating)
+```{r}
+s1<- ggplot(movies,aes(x=length, y=rating))+geom_point(alpha=.5)
+s1
+```
+
+
+
+
+
+
+## 6.  Ah...looks not so clear...so...zooming the x achsel and, btw, change a color make it beautiful (by a third variable ,here we use variable "year")
+```{r}
+s2<-s1+coord_cartesian(xlim = c(0,500),ylim = c(0,10))+geom_point(aes(color=year))
+s2
+```
+
+ Conclude: the length of movies does not affect the rating....
+
+
+## 7. Lets change a new dataset: "mtcars" from ggplot2. 
+```{r}
+glimpse(mtcars)
+```
+
+dataset description: 
+
+[, 1]	mpg:	Miles/(US) gallon
+
+[, 2]	cyl:	Number of cylinders
+
+[, 3]	disp:	Displacement (cu.in.)
+
+[, 4]	hp:	Gross horsepower
+
+[, 5]	drat:	Rear axle ratio
+
+[, 6]	wt:	Weight (1000 lbs)
+
+[, 7]	qsec:	1/4 mile time
+
+[, 8]	vs:	Engine (0 = V-shaped, 1 = straight)
+
+[, 9]	am:	Transmission (0 = automatic, 1 = manual)
+
+[,10]	gear:	Number of forward gears
+
+<https://www.rdocumentation.org/packages/datasets/versions/3.6.2/topics/mtcars>
+
+
+
+
+
+## 8. Draw a scatterplot to find out the relationship between mpg and hp
+<https://rstudio-pubs-static.s3.amazonaws.com/234758_336c814abe0040538c44ddf0426565b0.html>
+
+```{r}
+mtcars1<-ggplot(data=mtcars,aes(x=mpg,y=hp))+geom_point()
+mtcars1
+```
+
+
+
+## 9. Following the last question, just make it looked dynamic, so let us change the shape, color and size
+<https://rstudio-pubs-static.s3.amazonaws.com/234758_336c814abe0040538c44ddf0426565b0.html>
+
+```{r}
+
+# change the color and shape based on the third variable, here is"cyl". 
+# if we want to show groups(discrete) of cyl, we're safest bet is to convert to factor, that is factor(cyl). if we wnat to show a constant change of color, than dont need factor()
+
+mtcars2<-mtcars1+geom_point(aes(shape=factor(cyl),color=factor(cyl),size=8))
+mtcars2
+```
+
+## 10.Display different enigine(vs)'s relastionship of mpg and hp, using facet_wrap
+```{r}
+mtcars3 <-mtcars2+facet_wrap(~ vs, nrow = 2)
+mtcars3
+```
+
+
+
+## 11. Following the last questions, add a trend line 
+```{r}
+mtcars4 <-mtcars3+stat_smooth()
+mtcars4
+```
+
+
+
+
+## 12. Summarize data and show in the plot (group_by(), summarise() will be official introduced in next step)
+<https://data-se.netlify.app/2020/12/07/ex-visualizing-diamonds/>
+
+```{r}
+
+mtcars %>% 
+  group_by(vs) %>% 
+  summarise(mpg_md_vs = median(mpg, na.rm = T),
+            mpg_max_vs = max(mpg, na.rm = T)) -> mtcars_summarized
+
+mtcars_summarized
+```
+
+```{r}
+mtcars5 <- mtcars4 + 
+  geom_vline(data = mtcars_summarized, aes(xintercept = mpg_md_vs)) +
+  geom_label(data = mtcars_summarized, aes(x = mpg_md_vs,
+                                             y = mpg_max_vs*0.07, # at 7% height
+                                             label = mpg_md_vs))
+
+
+mtcars5
+```
+

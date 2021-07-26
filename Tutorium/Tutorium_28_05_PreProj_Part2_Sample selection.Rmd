@@ -1,0 +1,215 @@
+---
+title: "Tutorium_28_05_PreProj_Part2_Sample selection"
+author: "dzt"
+date: "5/27/2021"
+output: pdf_document
+---
+
+The Middle part of the project.
+
+New Thema:
+
+-Sample selection, using regsubsets() function
+
+
+ 
+
+
+#  1 Daten import
+
+```{r}
+library(readr)
+research <- read_csv("https://raw.githubusercontent.com/sebastiansauer/willingness-vaccination-covid19/main/data/d3.csv")
+
+```
+
+
+`
+
+# 2 Check the missing number
+```{r}
+library(skimr) 
+skim(research) 
+```
+
+2 age missing
+
+```{r}
+library(dplyr)
+research <- select(research, -extra,-agree,-neuro,-cons,-open)
+research
+```
+
+# 3 Drop cases with missing values in age
+
+
+```{r}
+library(tidyr)
+researchnona1 <-
+research %>%drop_na(age) 
+
+skim(researchnona1)
+```
+```{r}
+researchnona1
+```
+
+#  4 Distribution of output "willingess" variablen
+```{r}
+library(ggplot2)
+researchnona1%>%
+ggplot(aes(x=willingness)) + geom_histogram()
+```
+
+#  5 Reshaping the data(pivot_long)
+
+
+```{r}
+
+library(tidyverse)
+researchreshaping <-
+select_if(researchnona1,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable")
+  # everything() is a convenient shorthand to pivot all variables. pivot_longer(everything()) https://jhudatascience.org/tidyversecourse/wrangle-data.html
+
+researchreshaping
+```
+
+
+#  6 Distribution of all predictors 
+
+```{r}
+
+  ggplot(researchreshaping,aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(~ variable, scales = "free")
+```
+For both the cases variables, the right-skew makes the lower end of the x-axis hard. 
+To make patterns in the data more interpretable and for helping to meet the assumptions of inferential statistics, then need to be transformed
+
+
+# 7 How to transform data to normal distribution in R?  
+
+<https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/>
+<https://moderndive.com/11-thinking-with-data.html#house-prices-EDA-I> 11.3
+
+first try log transformation in a situation where the dependent variable starts to increase more rapidly with increasing independent variable values
+
+log10(x) for positively skewed data,
+log10(max(x+1) - x) for negatively skewed data
+
+
+#  8 Transform  (via logarithm)
+
+```{r}
+
+researchnona1<- mutate(researchnona1,cases_log10=log10(age)) 
+researchnona1
+```
+
+
+```{r}
+select_if(researchnona1,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable") %>%
+  ggplot(aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(~ variable, scales = "free")#Each axis has a scale
+```
+
+  
+# 9  Check outliers
+```{r}
+select_if(researchnona1,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable") %>%
+  ggplot(aes(x = value)) +
+  geom_boxplot() +
+  facet_wrap(~ variable, scales = "free")
+```
+  
+
+# 10 Find correlation (cormatrix)
+```{r}
+library(corrplot)
+researchnona1 <- select_if(researchnona1, is.numeric)
+corrplot(cor(researchnona1), method = "circle")
+```
+cases_log10 and age have a strong positive correlation
+
+
+
+```{r}
+cor(researchnona1)
+```
+
+Creat models, willingness as outcome, to see which variables can be used in model
+# 11 Model 1
+```{r}
+model1 <- lm(willingness ~ fear, data = researchnona1)
+```
+
+# 12 Model 2
+```{r}
+model2 <- lm(willingness ~ fear+cons1, data = researchnona1)
+```
+
+# 13 Model 3
+```{r}
+model3 <- lm(willingness ~ fear + cons1 + cons2, data = researchnona1)
+```
+
+# 14 The regsubsets() function 
+(part of the leaps library) performs best subregsubsets()
+set selection by identifying the best model that contains a given number
+of predictors, where best is quantified using RSS
+From: ISLR Book 6.5
+```{r}
+library (leaps)
+modelfull <- regsubsets (willingness ~.,researchnona1)
+summary (modelfull)
+```
+An asterisk indicates that a given variable is included in the corresponding
+model. For instance, this output indicates that the best two-variable model
+contains only fear and cons1. By default, regsubsets() only reports results
+up to the best eight-variable model
+
+# 15 The regsubsets() function,examine R2, RSS, adjusted R2, Cp, and BIC
+```{r}
+reg.summary =summary (modelfull)
+names(reg.summary)
+```
+# 16 Check adjust r squared
+```{r}
+reg.summary$adjr2
+```
+For instance, we see that the R2 statistic increases from 15.8%, when only
+one variable is included in the model, to almost 28.2 %, when all variables
+are included. As expected, the R2 statistic increases monotonically as more
+variables are included.
+
+
+```{r}
+
+
+plot(reg.summary$adjr2 ,xlab =" Number of Variables ",
+ylab=" Adjusted RSq",type="l")
+```
+`
+
+# 17 Confirm model 
+extra1 extra2
+```{r}
+model4 <- lm(willingness ~fear + extra1+ agree1+ cons1 +open1 +extra2  +neuro2 + open2  ,data = researchnona1 )
+```
+
+```{r}
+summary(model4)
+```
+# 18 Confirm model with interaktion
+```{r}
+model5 <- lm(willingness ~fear + extra1+ agree1+ cons1 +open1 +extra2  +neuro2 + open2 + fear:cons1+ fear:extra2  ,data = researchnona1 )
+```
+
+```{r}
+summary(model5)
+```
+

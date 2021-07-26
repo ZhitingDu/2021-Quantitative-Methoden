@@ -1,0 +1,224 @@
+---
+title: "Tutorium-18-06-CaseStudy-Seattle house prices"
+author: "dzt"
+date: "6/18/2021"
+output: 
+  html_document: 
+    toc: yes
+    theme: cerulean
+---
+
+
+
+This dataset contains house sale prices for King County, which includes Seattle. It includes homes sold between May 2014 and May 2015.
+
+It's a great dataset for evaluating simple regression models.
+
+
+Dataset is from : <https://www.kaggle.com/harlfoxem/housesalesprediction>
+
+Case Study is here : <https://moderndive.com/11-thinking-with-data.html#seattle-house-prices>
+
+
+In this case study, we’ll create a multiple regression model where:
+
+The outcome variable y is the sale price of houses.
+
+
+# EDA
+ 
+ 
+```{r}
+library(tidyverse)
+library(moderndive)
+library(skimr)
+library(fivethirtyeight)
+```
+
+
+
+## Overview
+```{r}
+skim(house_prices)
+
+```
+
+
+##  Reshaping the data (pivot_longer)
+```{r}
+
+
+house_prices_pivot <-
+select_if(house_prices,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable")
+  # everything() is a convenient shorthand to pivot all variables. pivot_longer(everything()) https://jhudatascience.org/tidyversecourse/wrangle-data.html
+house_prices_pivot
+```
+
+## Distribution of all predictors 
+
+```{r}
+
+  ggplot(house_prices_pivot,aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(~ variable, scales = "free")
+```
+
+
+
+For both the price and sqft_living variables, the right-skew makes distinguishing houses at the lower end of the x-axis hard. This is because the scale of the x-axis is compressed by the small number of quite expensive and immensely-sized houses.
+
+## log10 transformation to right-skew variables
+
+```{r}
+house_prices <- house_prices %>%
+  mutate(
+    log10_price = log10(price),
+    log10_size = log10(sqft_living)
+    )
+```
+
+```{r}
+# Before log10 transformation:
+ggplot(house_prices, aes(x = price)) +
+  geom_histogram(color = "white") +
+  labs(x = "price (USD)", title = "House price: Before")
+
+# After log10 transformation:
+ggplot(house_prices, aes(x = log10_price)) +
+  geom_histogram(color = "white") +
+  labs(x = "log10 price (USD)", title = "House price: After")
+```
+
+```{r}
+# Before log10 transformation:
+ggplot(house_prices, aes(x = sqft_living)) +
+  geom_histogram(color = "white") +
+  labs(x = "living space (square feet)", title = "House size: Before")
+
+# After log10 transformation:
+ggplot(house_prices, aes(x = log10_size)) +
+  geom_histogram(color = "white") +
+  labs(x = "log10 living space (square feet)", title = "House size: After")
+```
+
+##  Dataset division in Train and Test
+```{r}
+train <-  slice_sample(house_prices, prop=.75)
+train
+```
+
+
+```{r}
+test <- anti_join(house_prices, train, by="id")
+test
+```
+## Check outliers in outcome using Z value
+
+z=(x-mean)/sd
+```{r}
+train_outliers<-
+train %>%
+mutate(price_z = (price - mean(price, na.rm = TRUE)) /
+sd(price, na.rm = TRUE)) %>%
+mutate(is_extreme = if_else(abs(price_z) > 3, TRUE, FALSE)) %>%
+count(is_extreme)
+```
+
+
+
+```{r}
+train_outliers
+```
+TRUE: outliers
+FALSE : not outliers
+ 
+ 
+## Drop outliers in outcome (filter)
+```{r}
+
+train_outliers <- train%>%mutate(price_z = (price - mean(price, na.rm = TRUE)) /
+sd(price, na.rm = TRUE)) %>%
+mutate(is_extreme = if_else(abs(price_z) > 3, TRUE, FALSE))
+train_outliers
+```
+
+
+```{r}
+train <-
+  train_outliers %>% 
+  filter(is_extreme==FALSE)
+train
+```
+
+# Model 1 with transformed predictors (y= log10_price, x1=log10_size, x2=condition)
+## Interaction 
+```{r}
+# Plot interaction model
+ggplot(train, 
+       aes(x = log10_size, y = log10_price, col = condition)) +
+  geom_point(alpha = 0.05) +
+  geom_smooth(method = "lm", se = FALSE) +
+  labs(y = "log10 price", 
+       x = "log10 size", 
+       title = "House prices in Seattle")
+```
+
+
+we see there is a positive relationship between house price and size, meaning as houses are larger, they tend to be more expensive.
+
+
+and with different condition will result differnt slopes of size and price, that is, condition has interaction with size
+
+## Fit regression model with log transformation and interaction
+```{r}
+# Fit regression model:
+price_interaction <- lm(log10_price ~ log10_size * condition, 
+                        data = train)
+
+# Get regression table:
+get_regression_table(price_interaction)
+```
+```{r}
+summary(price_interaction)
+```
+
+
+# Prediction
+
+
+```{r}
+pred <- predict(price_interaction, newdata = test)
+```
+
+
+## reverse transformation in pred
+```{r}
+library(modelr)
+house_prices <-
+  house_prices %>% 
+  add_predictions(price_interaction,
+                  var = "pred_log10") %>% 
+  mutate(pred = 10^pred_log10)
+```
+<https://data-se.netlify.app/2021/06/18/r%C3%BCcktransformation-logarithmierter-y-werte/>
+
+
+## check
+```{r}
+house_prices %>% 
+  select(price, pred_log10, pred) %>% 
+  slice(1:10)
+```
+
+```{r}
+test2 <- mutate(test, pred)
+```
+
+
+
+```{r}
+handover<- select(test2, pred,id)
+handover
+```
+

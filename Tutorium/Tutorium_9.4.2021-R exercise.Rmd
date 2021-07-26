@@ -1,0 +1,45 @@
+---
+title: "muder"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+
+#read the data
+murders <- read.csv("murders.csv")
+
+# have a look of the data
+library(dplyr)
+glimpse(murders)
+
+
+head (murders)
+
+```
+
+
+```{r}
+#lm() linear model function, so here y is annual_murders_per_mil, x is perc_pov
+m_murders_poverty <- lm(murders$annual_murders_per_mil ~ murders$perc_pov)
+
+#summary() let r do the calculation
+summary(m_murders_poverty)
+```
+```{r}
+#check how the model looks like, draw a plot
+library(tidyverse)
+ggplot(m_murders_poverty,aes(x=murders$annual_murders_per_mil,y=murders$perc_pov)) + geom_point(size=4,shape=1)+geom_smooth(aes(group=1))
+
+```
+
+```{r}
+
+#Calculate the correlation coefficient.Since we know R2. The correlation coefficient is simply the square root of R2
+R2 <- 0.7052
+
+R <- sqrt(R2)
+
+sqrt(summary(m_murders_poverty)$r.squared)
+```
+
+

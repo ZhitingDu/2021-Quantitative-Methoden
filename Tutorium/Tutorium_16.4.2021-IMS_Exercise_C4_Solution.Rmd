@@ -1,0 +1,286 @@
+---
+title: "IMS_Exercise_Chapter4_Solution"
+author: "dzt"
+date: "4/15/2021"
+output:
+  html_document:
+    df_print: paged
+---
+
+<https://openintro-ims.netlify.app/multi-logistic-models.html#ind-and-cat-predictors>
+
+
+
+# 4.1.4.1 -- Absenteeism, Part I
+
+
+## a)Write the equation of the regression model.
+$y=18.93 - 9.11x_1 + 3.1x_2 + 2.15x_3 +\epsilon$
+
+## b)Interpret each one of the slopes in this context.
+The slope of eth indicates that, all else being equal, there is a 9.11 day reduction in the predicted absenteeism when the subject is NO aboriginal.
+
+The slope of sex indicates that, all else being equal, there is a 3.10 day increase in the predicted absenteeism when the subject is male.
+
+The slope of lrn indicates that, all else being equal, there is a 2.15 day increase in the predicted absenteeism when the subject is a slow learner.
+
+## c) Calculate the residual for the first observation in the data set: a student who is aboriginal, male, a slow learner, and missed 2 days of school.
+
+$e_1=y_1-\hat{y}_1$
+```{r}
+y1 <-2
+y1_hut <-18.93-9.11*0+3.1*1+2.15*1
+
+e_1<-y1-y1_hut
+e_1
+```
+
+
+## d) The variance of the residuals is 240.57, and the variance of the number of absent days for all students in the data set is 264.17. Calculate the R2 and the adjusted R2. Note that there are 146 observations in the data set.
+
+```{r}
+n<-146
+r2 <- 1-(240.57/264.17)
+r2
+```
+
+
+```{r}
+n<-146
+k<-3
+r2_adj<-1-(240.57/264.17)*((n-1)/(n-k-1))
+r2_adj
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 4.1.4.2 Baby weights, Part III 
+<https://rstudio-pubs-static.s3.amazonaws.com/445889_fcc7a9b27a984d9d9a624c666ace5dff.html>
+
+
+## a) Write the equation of the regression line that includes all of the variables.
+$y=-80.4+0.44*gestation-3.33*parity-0.01*age+1.15*heigt+0.05*weight-8.4*smoke$
+
+## b)Interpret the slopes of gestation and age in this context.
+gestation: The model predicts a 0.44 ounce increase in the birth weight of the baby for each additional day of pregnancy, all else held constant.
+age: The model predicts a 0.01 ounce decrease in the birth weight of the baby for each additional year in mother’s age, all else held constant.
+
+## c)The coefficient for parity is different than in the linear model shown in Exercise 8.2. Why might there be a difference?
+
+Parity might be correlated with one of the other variables in the model, which complicates model estimation
+
+## d) calculate the residual for the first observation in the data set.
+$y=-80.4+0.44*284-3.33*0-0.01*27+1.15*62+0.05*100-8.4*0$
+```{r}
+y_hut<--80.4+0.44*284-3.33*0-0.01*27+1.15*62+0.05*100-8.4*0
+y_hut
+
+
+y1 <-120
+e_1<- y1 - y_hut
+e_1
+```
+
+## e)The variance of the residuals is 249.28, and the variance of the birth weights of all babies in the data set is 332.57. Calculate the R2 and the adjusted R2. Note that there are 1,236 observations in the data set.
+$R^2=1-\frac{\text{variabiliy in the residuals}}{\text{variabiliy in the outcome}}$
+
+```{r}
+rsquared <-1-249.28/332.57
+rsquared
+```
+
+$R^2_adjust = 1-\frac{\text{Variability in residuals *(n-1)}}{\text{variablityin the outcome*(n-k-1)}}$
+
+
+```{r}
+n<-1236
+k<-6
+r_adj<-1-(249.28/332.57)*((n-1)/(n-k-1))
+r_adj
+```
+
+
+
+
+
+
+
+
+
+
+# 4.1.4.3 Baby weights, Part II
+
+<https://rpubs.com/priyankaigit/hw8-da>
+
+## a) Write the equation of the regression model.
+$Birthweight = 120.07-1.93*parity$
+
+
+## b) Interpret the slope in this context, and calculate the predicted birth weight of first borns and others.
+If 0 is the first born, 1 is the not first born (there might be a mistake in book)
+first born': bw's weight: 120.07
+not first born's weight: 120.07-1.93*1=118.07
+
+Slope of this regression line indicates that, every first born child weighs heavier at birth than the ones born afterwards. In other words, any child who is not a first born will weigh 1.93 lbs lesser at birth than the first child.
+
+
+
+## c) Is there a statistically significant relationship between the average birth weight and parity?
+
+Since the p-value = .1052 (p-value > 0.05), the relationship between birthweight and order of childbirth is not statistically significant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 4.1.4.4 Baby weights, Part I
+
+<https://courses.lumenlearning.com/odessa-introstats1-1/chapter/solutions-to-selected-exercises-2/>
+
+## a) Write the equation of the regression model.
+$Birthweight = 123.05-8.94*smoke$
+
+## b) Interpret the slope in this context, and calculate the predicted birth weight of babies born to smoker and non-smoker mothers.
+The estimated body weight of babies born to smoking mothers is 8.94 ounces lower than babies born to non-smoking mothers. Smoker: 123.05 − 8.94 × 1 = 114.11 ounces. Non-smoker: 123.05 − 8.94 × 0 = 123.05 ounces.
+## c) Is there a statistically significant relationship between the average birth weight and smoking?
+
+Given that the p-value for the smoke coeffiecient is essentially zero, we can say the relationship between the average birth weight and smoking is statistically significant.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 4.1.4.5 Cherry trees 
+
+<https://rpubs.com/priyankaigit/hw8-da>
+
+
+## a)Calculate a 95% confidence interval for the coefficient of height, and interpret it in the context of the data.
+
+$95ConfidenceInterval = (b1-1.96∗se,b1+1.96∗se)$
+```{r}
+low <- 0.34 -1.96*0.13
+high<- 0.34+1.96*0.13
+low
+high
+```
+
+
+
+## b)One tree in this sample is 79 feet tall, has a diameter of 11.3 inches, and is 24.2 cubic feet in volume. Determine if the model overestimates or underestimates the volume of this tree, and by how much.
+
+Using the estimates/ regression equation we can find that:
+
+
+```{r}
+dia<-11.3
+vol<- -57.99+0.34*79+4.71*11.3
+vol
+```
+Actual vol = 24.2 Estimated vol = 22.093. Thus this case has been underestimated.
+
+
+
+
+
+
+
+
+
+
+# 4.1.4.6 GPA
+
+
+<https://courses.lumenlearning.com/odessa-introstats1-1/chapter/solutions-to-selected-exercises-2/>
+
+## a)Calculate a 95% confidence interval for the coefficient of gender in the model, and interpret it in the context of the data.
+$95ConfidenceInterval=(b1-1.96∗se,b1+1.96∗se)$
+```{r}
+low <- -0.08 -1.96*0.12
+high<- -0.08+1.96*0.12
+low
+high
+```
+(-0.32, 0.16). We are 95% confident that male students on average have GPAs 0.32 points lower to 0.16 points higher than females when controlling for the other variables in the model.
+
+
+## b)Would you expect a 95% confidence interval for the slope of the remaining variables to include 0? Explain
+Yes, since the p-value is larger than 0.05 in all cases (not including the intercept).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# 4.2.3.1 Absenteeism, Part II
+<https://rpubs.com/thasleem/d606_c8h>
+
+The Adjusted R2=0.0723 is better, so the lrn variable should be removed from the model first
+
+# 4.2.3.2 Absenteeism, Part III
+ethnicity
+
+# 4.2.3.3 Baby weights, Part IV 
+no age
+
+# 4.2.3.4 Baby weights, Part V 
+gestation
+
+# 4.2.3.5 Movie lovers, Part II
+
+The company should use p-value approach in order to select variables. The p-value approach uses the probability of the hypothetical result obtaines by a sample survey as compared with the real situtation result.
+
+
+
+
+
+
+
+

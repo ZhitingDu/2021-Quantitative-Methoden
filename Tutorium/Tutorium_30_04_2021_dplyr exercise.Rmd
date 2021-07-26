@@ -1,0 +1,163 @@
+---
+title: "Untitled"
+author: "dzt"
+date: "4/29/2021"
+output: html_document
+---
+
+
+
+# Dplyr and ggplot exercise
+## Solve the following tasks only with the dplyr and ggplot2 library. We will repeat the following functions:
+
+filter () (and slice ())\ 
+arrange ()\
+select () (and rename ())\
+distinct ()\
+mutate () (and transmute ())\
+summarize ()\
+sample_n () and sample_frac ()\
+reorder()\
+corrplot()\
+
+
+## 1 load dplyr
+```{r }
+library(dplyr)
+```
+
+
+## 2 We will use the mtcars data frame for this exercise
+
+
+```{r}
+head(mtcars)
+```
+## 3 Give the row name a column name
+```{r}
+library(tidyverse)
+mtcars <-
+rownames_to_column(mtcars, var = "cars")
+```
+
+```{r}
+head(mtcars)
+```
+
+## 4 Output the lines of the cars with an mpg value over 20 and exactly 6 cylinders.
+
+```{r}
+mtcars%>%
+filter(mpg>20, cyl==6)
+```
+
+## 5 Rearrange the data frame. It should first be sorted according to cyl and then in descending order according to wt
+```{r}
+head(arrange(mtcars,cyl,desc(wt)))
+```
+## 6 Select the mpg and hp columns.
+
+```{r}
+head(select(mtcars,mpg,hp))
+```
+## 7 Choose the unique values of the gear column.
+
+```{r}
+distinct(select(mtcars,gear))
+```
+
+## 8  Find the average mpg value using dplyr.
+```{r}
+avg_mpg <-
+summarise(mtcars,mean(mpg))
+ avg_mpg
+```
+
+
+
+
+## 9 Use the pipe operator to get the average hp value for cars with 6 cylinders.
+
+```{r}
+mtcars %>% filter(cyl==6) %>% summarise(avg_hp = mean(hp))
+```
+
+
+## 10 Create a new column "Performance", which is calculated by hp divided by wt.
+```{r}
+mtcars <-
+mtcars %>%
+mutate(performance= hp/wt)
+
+mtcars
+
+```
+## 11 Which car brand has the best perforamcne?
+```{r}
+performancelist <-
+mtcars %>%
+  select(cars,performance) %>%
+  arrange(desc(performance))
+
+performancelist
+```
+
+## 12 Show the first 10% performance
+
+```{r}
+mtcarstop10percent <-
+mtcars%>%
+  filter(percent_rank(performance)>.9)
+
+mtcarstop10percent
+```
+
+## 13 Show the first 10% performance in ggplot
+
+```{r}
+library(ggplot2)
+
+ggplot(mtcarstop10percent, aes(x=cars,y=performance)) + geom_bar(stat = "identity")
+# If you want the heights of the bars to represent values in the data, use stat="identity" and map a value to the y aesthetic.#
+```
+
+
+## 14 Reorder the bar
+
+```{r}
+ggplot(mtcarstop10percent, aes(x=reorder(cars,performance), y=performance))+ 
+  geom_bar(stat="identity")
+
+
+```
+
+`
+
+
+## 15 Pearson correlation between 2 variables
+```{r}
+
+cor(mtcars$hp, mtcars$mpg)
+```
+
+
+## 16 Correlation matrix: correlations for all variables
+```{r}
+#The function corrplot() takes the correlation matrix as the first argument. 
+# because column cars is not a numeric, so we first need to select the all the numeric.
+
+library(corrplot)
+
+mtcarscorplot <- select_if(mtcars, is.numeric)
+corrplot(cor(mtcarscorplot), method = "circle")
+
+```
+
+
+
+
+
+
+
+
+

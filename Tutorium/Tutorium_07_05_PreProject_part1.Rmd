@@ -1,0 +1,203 @@
+---
+title: "Tutorium_07_05_2021_PreProj_Part1"
+author: "dzt"
+date: "5/6/2021"
+output: html_document
+---
+
+The first part of the project.
+
+Thema:
+
+-Data import
+
+-Exploratory data analysis
+ -datashape transform(pivot_long())
+ -distribution check(ggplot(),facet_wrap())
+ -logarithm transformation(log())
+ -missing value check(skim(),drop())
+ -correlation check (cor())
+ -outliers check(boxplot)
+
+-some stories found in the data
+
+
+ 
+
+
+#  1 Daten import
+
+```{r}
+library(readr)
+research <- read_csv("https://raw.githubusercontent.com/sebastiansauer/willingness-vaccination-covid19/main/data/d3.csv")
+
+```
+
+
+`
+
+# 2 Check the missing number
+```{r}
+library(skimr) 
+skim(research) 
+```
+
+2 age missing
+
+```{r}
+library(dplyr)
+research <- select(research, -extra,-agree,-neuro,-cons,-open)
+research
+```
+
+# 3 Drop cases with missing values in age
+
+
+```{r}
+library(tidyr)
+researchnona1 <-
+research %>%drop_na(age) 
+
+skim(researchnona1)
+```
+```{r}
+researchnona1
+```
+
+#  4 Distribution of output "willingess" variablen
+```{r}
+library(ggplot2)
+researchnona1%>%
+ggplot(aes(x=willingness)) + geom_histogram()
+```
+
+#  5 Reshaping the data(pivot_long)
+
+
+```{r}
+
+library(tidyverse)
+researchreshaping <-
+select_if(researchnona1,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable")
+  # everything() is a convenient shorthand to pivot all variables. pivot_longer(everything()) https://jhudatascience.org/tidyversecourse/wrangle-data.html
+
+researchreshaping
+```
+
+
+#  6 Distribution of all predictors 
+
+```{r}
+
+  ggplot(researchreshaping,aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(~ variable, scales = "free")
+```
+For both the cases variables, the right-skew makes the lower end of the x-axis hard. 
+To make patterns in the data more interpretable and for helping to meet the assumptions of inferential statistics, then need to be transformed
+
+
+# 7 How to transform data to normal distribution in R?  
+
+<https://www.datanovia.com/en/lessons/transform-data-to-normal-distribution-in-r/>
+<https://moderndive.com/11-thinking-with-data.html#house-prices-EDA-I> 11.3
+
+first try log transformation in a situation where the dependent variable starts to increase more rapidly with increasing independent variable values
+
+log10(x) for positively skewed data,
+log10(max(x+1) - x) for negatively skewed data
+
+
+#  8 Transform  (via logarithm)
+
+```{r}
+
+researchnona1<- mutate(researchnona1,cases_log10=log10(age)) 
+researchnona1
+```
+
+
+```{r}
+select_if(researchnona1,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable") %>%
+  ggplot(aes(x = value)) +
+  geom_histogram() +
+  facet_wrap(~ variable, scales = "free")#Each axis has a scale
+```
+
+  
+# 9  Check outliers
+```{r}
+select_if(researchnona1,is.numeric) %>%  # select only numbers
+  pivot_longer(everything(), names_to = "variable") %>%
+  ggplot(aes(x = value)) +
+  geom_boxplot() +
+  facet_wrap(~ variable, scales = "free")
+```
+  
+
+# 10 Find correlation (cormatrix)
+```{r}
+library(corrplot)
+researchnona1 <- select_if(researchnona1, is.numeric)
+corrplot(cor(researchnona1), method = "circle")
+```
+cases_log10 and age have a strong positive correlation
+
+
+
+```{r}
+cor(researchnona1)
+```
+
+
+
+# 11 Creat a regression model based on the correlation and transformation
+```{r}
+cases_interaction <- lm(researchnona1$willingness ~ age + cases_log10 + age *cases_log10 , 
+                        data = researchnona1)
+summary(cases_interaction)
+```
+
+
+# 12 Interpretation the regression model based on the correlation and transformation
+
+$y =1026.85+ 208.491∗age - 2113.392∗cases_log10 - 93.74* age*cases_log10$
+
+
+
+# 13 Plotting Interaction Effects of Regression Models
+<https://cran.r-project.org/web/packages/sjPlot/vignettes/plot_interactions.html>
+
+```{r}
+
+library(sjPlot)
+
+```
+```{r}
+plot_model(cases_interaction, type = "int") #type = "int" to plot marginal effects of interaction terms in a more convenient way.
+```
+
+# 14 The relationship between health situation with reserved character in different ages
+```{r}
+ggplot(researchnona1, 
+       aes(x = extra1, y = health)) +
+  geom_point(alpha = 0.4) +
+  geom_smooth(method = "lm", se = FALSE) +
+  facet_wrap(~age)
+```
+
+At age 18 and 23, the reserved character has more effect on health situation, at other ages, seems quite plain
+
+
+# 15 Willingness to get a covid19 vaccination between genders
+
+```{r}
+ggplot(research, 
+       aes(x = willingness))+geom_histogram() + facet_wrap(~sex)
+```
+we can see either girls or boys have more people willing to get a covid19 vaccination
+
+
+
