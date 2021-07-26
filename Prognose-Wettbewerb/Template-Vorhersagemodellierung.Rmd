@@ -1,0 +1,217 @@
+---
+title: "Vorhersagemodellierung Gehalt"
+author: "Zhiting"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    number_sections: true
+  word_document: default
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+<!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
+
+# Einleitung
+
+Im Datensatz `Code-Book zur Lernerfolg-Analyse` soll die Zielvariable `punkt` im *Anwendungsdaten*-Datensatz vorhergesagt werden. Dazu können alle übrigen Variablen im Trainings-Datensatz als Prädiktoren herangezogen werden.
+
+
+# Pakete laden
+
+```{r knitr-setup, message = FALSE}
+library(tidyverse) 
+
+library(arm) 
+library(openintro) 
+library(skimr) 
+library(broom) 
+library(cowplot) 
+library(yardstick) 
+library(ggfortify) 
+library(ggstatsplot) 
+library(nycflights13) 
+library(gapminder) 
+library(moderndive)
+```
+
+# Daten laden
+
+```{r}
+library(readr)
+train <- read.csv("/Users/duzhiting/Desktop/2021-sose-master/QuantMeth1/Prognose-Wettbewerb/Daten/Trainingsdaten.csv")
+test <- read.csv("/Users/duzhiting/Desktop/2021-sose-master/QuantMeth1/Prognose-Wettbewerb/Daten/Anwendungsdaten.csv")
+```
+
+```{r}
+glimpse(train)
+glimpse(test)
+```
+
+# Datenvorverarbeitung
+
+```{r}
+train <- na.omit(train)
+sum(is.na(train))
+```
+
+```{r}
+library(dplyr)
+train <- train %>% mutate_if(is.character,as.factor)
+```
+
+```{r}
+summary(train) 
+```
+
+
+```{r}
+train %>% 
+  ggplot(aes(x = punkte)) + 
+  geom_histogram()
+```
+# extreme outlier
+```{r}
+train %>%
+mutate(punkte_z = (punkte - mean(punkte, na.rm = TRUE)) /
+sd(punkte, na.rm = TRUE)) %>%
+mutate(is_extreme = if_else(abs(punkte_z) > 3, TRUE, FALSE)) %>%
+count(is_extreme)
+```
+No outlier bigger than 3 or smaller than 3 standard deviations
+
+# correlation
+```{r}
+num.cols <- sapply(train, is.numeric) 
+cor.data <- cor(train[,num.cols])
+cor.data
+```
+Punkte has weak correlation with fehltage and haarfrabe
+
+
+# choose the number of selected vairable FOR THE BIGGEST RSQUARE
+```{r}
+library(leaps)
+regfit.full<-  regsubsets(punkte ~ ., data = train,nvmax =12)
+reg.summary <- summary (regfit.full)
+names(reg.summary )
+reg.summary$rsq
+```
+
+# RSQ RSS
+```{r}
+plot(reg.summary$rsq,xlab="number of variables",ylab="rsqaure", type= "l")
+plot(reg.summary$rss,xlab="number of variables",ylab="rss", type= "l")
+```
+ 
+
+# Adjusted Rsquare
+```{r}
+which.max(reg.summary$adjr2)
+plot(reg.summary$adjr2,xlab="number of variables",ylab="Adjusted rsquare", type= "l")
+
+```
+
+
+# CP
+```{r}
+which.min(reg.summary$cp)
+plot(reg.summary$cp,xlab="number of variables",ylab="CP", type= "l")
+
+```
+
+# BIC
+```{r}
+which.min(reg.summary$bic)
+plot(reg.summary$cp,xlab="number of variables",ylab="BIC", type= "l")
+
+```
+
+# selected variables
+```{r}
+
+plot(regfit.full, scale = "r2")
+plot(regfit.full, scale = "adjr2")
+plot(regfit.full, scale = "Cp")
+plot(regfit.full, scale = "bic")
+```
+
+
+
+# Model 1
+```{r}
+lm.model <- lm(punkte ~ ., data = train)
+summary(lm.model)
+```
+
+# Model 2
+```{r}
+lm.model <- update(lm.model, ~.-alkohol)
+summary(lm.model)
+```
+
+# Model 3
+```{r}
+lm.model <- update(lm.model, ~.-fehltage)
+summary(lm.model)
+```
+
+
+
+# Model 4
+```{r}
+lm.model <- update(lm.model, ~.-haarfarbe)
+summary(lm.model)
+```
+
+# Model 5
+```{r}
+lm.model <- update(lm.model, ~.-lernzeit)
+summary(lm.model)
+```
+
+
+# Vorhersage
+
+Modell zur Vorhersage auf Testdatensatz anwenden und als neue Spalte im Test-Datensatz speichern:
+
+```{r}
+test_mit_vorhersage <-
+  test %>% 
+  mutate(pred = predict(lm.model, newdata = test))
+```
+
+Kontrolle, ob alles gut aussieht:
+
+```{r echo=FALSE}
+glimpse(test_mit_vorhersage)
+```
+
+
+Prognosedaten als CSV-Datei schreiben:
+
+```{r}
+test_mit_vorhersage %>% 
+  select(id, pred) %>% 
+  write_csv("Raetsel_Rudi_0123456_Prognose.csv")
+```
+
+
+
+# Zusammenfassung
+
+Fassen Sie gemeinsam kurz die zentralen Ergebnisse zusammen (0,5--1 Seite). Gehen Sie auch auf die Grenzen Ihrer Analyse ein.
+
+
+
+
+
+# Literatur
+
+https://www.youtube.com/watch?v=HkpECgfs_Pk
+ISLR, CHAPTER 6
+
+
+

@@ -1,0 +1,292 @@
+---
+title: "Vorhersagemodellierung Punkte"
+author: "Zhiting"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    number_sections: true
+  word_document: default
+editor_options: 
+  chunk_output_type: inline
+---
+
+
+<!-- Sollten Umlaute falsch angezeigt werden: "File -> Reopen with Encoding -> UTF8" -->
+
+# Einleitung
+
+Im Datensatz `Code-Book zur Lernerfolg-Analyse` soll die Zielvariable `punkt` im *Anwendungsdaten*-Datensatz vorhergesagt werden. Dazu können alle übrigen Variablen im Trainings-Datensatz als Prädiktoren herangezogen werden.
+
+
+# Pakete laden
+
+```{r knitr-setup, message = FALSE}
+library(tidyverse) 
+
+library(arm) 
+library(skimr) 
+library(broom) 
+library(cowplot) 
+library(yardstick) 
+library(ggfortify) 
+library(ggstatsplot) 
+library(gapminder) 
+library(moderndive)
+```
+
+# Daten laden
+
+```{r}
+
+library(readr)
+Trainingsdaten <- read_csv("Trainingsdaten.csv")
+Anwendungsdaten <- read_csv("Anwendungsdaten.csv")
+View(Trainingsdaten)
+View(Anwendungsdaten)
+```
+
+```{r}
+glimpse(Trainingsdaten)
+glimpse(Anwendungsdaten)
+```
+
+# Datenvorverarbeitung, check the missing number
+```{r}
+skim(Trainingsdaten) 
+```
+
+alter, geburtsjahr, llernzeit missing
+
+
+# Datenvorverarbeitung, replace the missing number in "alter, geburtsjahr "with the average 
+
+```{r}
+
+library(tidyr)
+Trainingsdaten_1<-replace_na(Trainingsdaten,replace = list(alter=mean(Trainingsdaten$alter,na.rm=TRUE)))
+
+Trainingsdaten_2 <-replace_na(Trainingsdaten_1,replace = list(geburtsjahr=mean(Trainingsdaten_1$geburtsjahr,na.rm=TRUE)))
+Trainingsdaten_2
+```
+
+# Datenvorverarbeitung, delet the missing number in "lernzeit "
+
+```{r}
+Trainingsdaten_3 <- drop_na(Trainingsdaten_2)
+Trainingsdaten_3
+```
+
+
+```{r}
+skim(Trainingsdaten_3)
+
+```
+fehltages, haarfarbes means much bigger than p50, perhaps outliers?
+
+
+# Datenvorverarbeitung,verteilung der output "punkte" variablen
+```{r}
+ggplot(Trainingsdaten_3,aes(x=punkte)) + geom_boxplot()
+```
+
+
+# remove output outlier 
+```{r}
+boxplot(Trainingsdaten_3$punkte)$out
+outliers <- boxplot(Trainingsdaten_3$punkte, plot=FALSE)$out
+print(outliers)
+Trainingsdaten_3[which(Trainingsdaten_3$punkte %in% outliers),]
+Trainingsdaten_3<- Trainingsdaten_3[-which(Trainingsdaten_3$punkte %in% outliers),]
+
+```
+
+# extreme output outlier using z
+```{r}
+Trainingsdaten_3 %>%
+mutate(punkte_z = (punkte - mean(punkte, na.rm = TRUE)) /
+sd(punkte, na.rm = TRUE)) %>%
+mutate(is_extreme = if_else(abs(punkte_z) > 3, TRUE, FALSE)) %>%
+count(is_extreme)
+```
+0 outliers bigger than 3 or smaller than 3 standard deviation
+
+
+
+# Datenvorverarbeitung,verteilung der input variablen
+
+```{r}
+library(purrr)
+library(tidyr)
+library(ggplot2)
+
+Trainingsdaten_3 %>%
+  keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(value)) +
+    facet_wrap(~ key, scales = "free") +
+    geom_histogram()
+```
+
+
+#  fehltage,lernzeit are right skew, then use log10-transformation
+
+
+
+```{r}
+library(dplyr)
+Trainingsdaten_4<- mutate(Trainingsdaten_3,
+                          
+                          
+                          fehltage_log10=log10(fehltage),
+                      
+                          lernzeit_log10=log10(lernzeit),
+                        
+    ) 
+
+
+
+
+Trainingsdaten_4 %>%
+  keep(is.numeric) %>% 
+  gather() %>% 
+  ggplot(aes(value)) +
+    facet_wrap(~ key, scales = "free") +
+    geom_histogram()
+  
+glimpse(Trainingsdaten_4)
+```
+#replace the -inf with NA??
+```{r}
+
+
+Trainingsdaten_5 <- data.frame(Trainingsdaten_4)
+is.na(Trainingsdaten_5) <- sapply(Trainingsdaten_5, is.infinite)
+view(Trainingsdaten_5)
+```
+
+
+
+
+
+
+# Find the best model, choose the number of selected vairable FOR THE BIGGEST RSQUARE
+```{r}
+library(leaps)
+regfit.full<-  regsubsets(punkte ~ ., data = Trainingsdaten_5,nvmax =12)
+reg.summary <- summary (regfit.full)
+names(reg.summary )
+reg.summary$rsq
+```
+
+# RSQ RSS
+```{r}
+plot(reg.summary$rsq,xlab="number of variables",ylab="rsqaure", type= "l")
+plot(reg.summary$rss,xlab="number of variables",ylab="rss", type= "l")
+```
+ 
+
+# Adjusted Rsquare
+```{r}
+which.max(reg.summary$adjr2)
+plot(reg.summary$adjr2,xlab="number of variables",ylab="Adjusted rsquare", type= "l")
+
+```
+
+
+# CP
+```{r}
+which.min(reg.summary$cp)
+plot(reg.summary$cp,xlab="number of variables",ylab="CP", type= "l")
+
+```
+
+# BIC
+```{r}
+which.min(reg.summary$bic)
+plot(reg.summary$cp,xlab="number of variables",ylab="BIC", type= "l")
+
+```
+
+# selected variables
+```{r}
+
+plot(regfit.full, scale = "r2")
+plot(regfit.full, scale = "adjr2")
+plot(regfit.full, scale = "Cp")
+plot(regfit.full, scale = "bic")
+```
+
+# Model 0 nullmodel
+```{r}
+m0 <- lm(punkte ~ 1, data = Trainingsdaten_5)
+summary(m0)
+```
+
+# Model 1
+```{r}
+m1 <- lm(punkte ~ alter+geburtsjahr+geschlecht+bildung_eltern+alkohol+gesundheit+sozial+unterstuetzung+wiederholungen+lernzeit_log10+fehltage_log10+haarfarbe, data = Trainingsdaten_5)
+summary(m1)
+```
+
+# Model 2
+```{r}
+m2 <-  lm(punkte ~ alter+geburtsjahr+geschlecht+bildung_eltern+alkohol+gesundheit+sozial+unterstuetzung+wiederholungen+lernzeit_log10+fehltage_log10, data = Trainingsdaten_5)
+summary(m2)
+```
+
+# Model 3
+```{r}
+m3 <-  lm(punkte ~ alter+geburtsjahr+geschlecht+bildung_eltern+alkohol+gesundheit+sozial+unterstuetzung+wiederholungen+lernzeit+fehltage_log10, data = Trainingsdaten_5)
+
+summary(m3)
+```
+seems model3 is the best
+
+#Vorhersage
+
+
+
+transformation in anwendungstaten:
+```{r}
+Anwendungsdaten_1<- dplyr::mutate(Anwendungsdaten,fehltage_log10=log10(fehltage))
+Anwendungsdaten_1
+```
+
+#replace the -inf with NA??
+```{r}
+
+
+Anwendungsdaten_2 <- data.frame(Anwendungsdaten_1)
+is.na(Anwendungsdaten_2) <- sapply(Anwendungsdaten_1, is.infinite)
+
+```
+
+Modell zur Vorhersage auf Testdatensatz anwenden und als neue Spalte im Test-Datensatz speichern:
+```{r}
+anwendungstaten_mit_vorhersage <-
+  Anwendungsdaten_2 %>% 
+  mutate(pred = predict(m3, newdata = Anwendungsdaten_2))
+```
+
+
+```{r echo=FALSE}
+str(anwendungstaten_mit_vorhersage)
+```
+
+
+Prognosedaten als CSV-Datei schreiben:
+
+```{r}
+write.csv(dplyr::select(anwendungstaten_mit_vorhersage,id,pred), file="zhiting.csv")
+```
+
+
+
+
+
+
+# Literatur
+
+https://www.youtube.com/watch?v=HkpECgfs_Pk
+ISLR, CHAPTER 6
